@@ -1,0 +1,11 @@
+<resources>
+    <string-array name="radius_array">
+        <item>10</item>
+        <item>20</item>
+        <item>50</item>
+    </string-array>
+    <string name="app_name">GeoFence</string>
+    <string name="setLocationButton">Set Center of Fence</string>
+    <string name="currentLocationText">Current Location</string>
+
+</resources>
