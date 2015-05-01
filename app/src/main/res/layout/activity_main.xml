@@ -40,4 +40,14 @@
         android:layout_below="@+id/currentLocationTextView"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Distance To Fence"
+        android:id="@+id/distanceTextView"
+        android:layout_above="@+id/locationButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="55dp" />
+
 </RelativeLayout>

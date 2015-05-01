@@ -130,8 +130,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     // Sets the current center of GeoFence to the current location
     public void setLocationButtonClick(View view){
         centerOfFence = new Location(mLocation);
-        TextView currentCenterTextView = (TextView) findViewById(R.id.currentCenterTextView);
-        currentCenterTextView .setText("CENTER OF FENCE SET: \n" + getCurrentLocationAsString());
+        setTextView(findViewById(R.id.currentCenterTextView),
+                "CENTER OF FENCE SET: \n" + getCurrentLocationAsString());
         setLocationTextViewText(getCurrentLocationAsString());
         Log.v(TAG,"CENTER LOCATION SET");
     }
@@ -145,6 +145,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             else{
                 setLocationTextViewText(getCurrentLocationAsString());
             }
+
+            setTextView(findViewById(R.id.distanceTextView),
+                    Float.toString(radiusOfFence - mLocation.distanceTo(centerOfFence)));
         }
     }
 
@@ -156,9 +159,13 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     }
 
     // HELPER METHODS
+    private void setTextView(View view, String text){
+        TextView currentView = (TextView) view;
+        currentView.setText(text);
+    }
+
     private void setLocationTextViewText(String text){
-        TextView currentLocationTextView = (TextView) findViewById(R.id.currentLocationTextView);
-        currentLocationTextView.setText(text);
+        setTextView(findViewById(R.id.currentLocationTextView), text);
     }
 
     private String getCurrentLocationAsString(){
