@@ -36,6 +36,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     private Location centerOfFence;
     // Current radius of fence
     private float radiusOfFence;
+    // Current Distance to Fence
+    private Float distanceToFence;
 
     // Location Listener
     private final LocationListener mLocationListener = new LocationListener() {
@@ -45,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
             // Checks to see if out of range of fence
             withinFence();
-            sendToPebble();
+            //sendToPebble("Exited Fence");
         }
 
         @Override
@@ -129,32 +131,46 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     // onClick listener for setLocation Button
     // Sets the current center of GeoFence to the current location
     public void setLocationButtonClick(View view){
-        centerOfFence = new Location(mLocation);
-        setTextView(findViewById(R.id.currentCenterTextView),
-                "CENTER OF FENCE SET: \n" + getCurrentLocationAsString());
-        setLocationTextViewText(getCurrentLocationAsString());
+        if(mLocation != null){
+            centerOfFence = new Location(mLocation);
+            setTextView(findViewById(R.id.currentCenterTextView),
+                    "CENTER OF FENCE SET: \n" + getCurrentLocationAsString());
+            setLocationTextViewText(getCurrentLocationAsString());
+        }
+        else{
+            setTextView(findViewById(R.id.currentCenterTextView),"GPS LOC NOT FOUND YET");
+        }
         Log.v(TAG,"CENTER LOCATION SET");
+    }
+
+    public void pebbleButtonClick(View view){
+            sendToPebble("Button Pressed");
+            Log.v(TAG, "PEBBLE BUTTON CLICK");
     }
 
     // Checks if user is still within the fence depending on fence range selected
     private void withinFence(){
         if(mLocation != null && centerOfFence != null) {
+            distanceToFence = radiusOfFence - mLocation.distanceTo(centerOfFence);
             if (mLocation.distanceTo(centerOfFence) > radiusOfFence) {
                 setLocationTextViewText("!!EXITED FENCE!!\n" + getCurrentLocationAsString());
+                sendToPebble("Exited Fence");
             }
             else{
                 setLocationTextViewText(getCurrentLocationAsString());
+
+                sendToPebble(distanceToFence.toString());
             }
 
             setTextView(findViewById(R.id.distanceTextView),
-                    Float.toString(radiusOfFence - mLocation.distanceTo(centerOfFence)));
+                    distanceToFence.toString());
         }
     }
 
     // Send a message to Pebble
-    public void sendToPebble() {
+    public void sendToPebble(String message) {
         PebbleDictionary dict = new PebbleDictionary();
-        dict.addString(MESSAGE_KEY, "EXITED FENCE");
+        dict.addString(MESSAGE_KEY, message);
         PebbleKit.sendDataToPebbleWithTransactionId(getApplicationContext(), GEOFENCE_APP_UUID, dict, 255);
     }
 

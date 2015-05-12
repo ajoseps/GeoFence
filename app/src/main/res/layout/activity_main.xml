@@ -50,4 +50,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="55dp" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pebble"
+        android:id="@+id/pebbleButton"
+        android:layout_marginTop="47dp"
+        android:layout_below="@+id/radiusSpinner"
+        android:layout_centerHorizontal="true"
+        android:onClick="pebbleButtonClick"/>
+
 </RelativeLayout>
