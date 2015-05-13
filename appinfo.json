@@ -1,0 +1,20 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        "location"
+    ],
+    "companyName": "ajoseps@gmail.com",
+    "longName": "GeoFence",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "2",
+    "shortName": "GeoFence",
+    "uuid": "667d207f-8e0a-4994-b348-853d65987b1d",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
