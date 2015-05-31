@@ -18,6 +18,9 @@ import com.getpebble.android.kit.Constants;
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import java.util.UUID;
+
+import java.lang.String;
+
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
     //DEBUGGING
     private static final String TAG = "GEOFENCING";
@@ -133,12 +136,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     public void setLocationButtonClick(View view){
         if(mLocation != null){
             centerOfFence = new Location(mLocation);
-            setTextView(findViewById(R.id.currentCenterTextView),
-                    "CENTER OF FENCE SET: \n" + getCurrentLocationAsString());
-            setLocationTextViewText(getCurrentLocationAsString());
+            setTextView(findViewById(R.id.centerLat), mLocation.getLatitude() + " W");
+            setTextView(findViewById(R.id.centerLong), mLocation.getLongitude() + " N");
+            setCurrentLocation();
         }
         else{
-            setTextView(findViewById(R.id.currentCenterTextView),"GPS LOC NOT FOUND YET");
+//            setTextView(findViewById(R.id.currentCenterTextView),"GPS LOC NOT FOUND YET");
         }
         Log.v(TAG,"CENTER LOCATION SET");
     }
@@ -150,21 +153,33 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     // Checks if user is still within the fence depending on fence range selected
     private void withinFence(){
+        setCurrentLocation();
         if(mLocation != null && centerOfFence != null) {
             distanceToFence = radiusOfFence - mLocation.distanceTo(centerOfFence);
             if (mLocation.distanceTo(centerOfFence) > radiusOfFence) {
-                setLocationTextViewText("!!EXITED FENCE!!\n" + getCurrentLocationAsString());
-                sendToPebble("Exited Fence");
+                setStatus("!!EXITED FENCE!!");
+                sendToPebble("Current Location: \n" + Double.toString(mLocation.getLatitude()).substring(0, 9) + " N\n"
+                        + Double.toString(mLocation.getLongitude()).substring(0, 9) + " W\n"
+                        + "Distance to Fence: " + distanceToFence.toString()
+                        + "\n!!!EXITED FENCE!!!");
             }
             else{
-                setLocationTextViewText(getCurrentLocationAsString());
-
-                sendToPebble(distanceToFence.toString());
+                
+//                sendToPebble(distanceToFence.toString() + " m away");
+                setCurrentLocation();
+                sendToPebble("Current Location: \n" + Double.toString(mLocation.getLatitude()).substring(0, 9) + " N\n"
+                        + Double.toString(mLocation.getLongitude()).substring(0, 9) + " W\n"
+                        + "Distance to Fence: " + distanceToFence.toString());
+                setTextView(findViewById(R.id.distanceTextView), distanceToFence.toString() + " m");
+                setStatus("Inside Fence");
             }
 
-            setTextView(findViewById(R.id.distanceTextView),
-                    distanceToFence.toString());
+
+
+
         }
+        sendToPebble("Current Location: \n" + Double.toString(mLocation.getLatitude()).substring(0, 9) + " N\n"
+                + Double.toString(mLocation.getLongitude()).substring(0, 9) + " W\n");
     }
 
     // Send a message to Pebble
@@ -180,8 +195,13 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         currentView.setText(text);
     }
 
-    private void setLocationTextViewText(String text){
-        setTextView(findViewById(R.id.currentLocationTextView), text);
+    private void setStatus(String text) {
+        setTextView(findViewById(R.id.status), text);
+    }
+
+    private void setCurrentLocation() {
+        setTextView(findViewById(R.id.currentLat), mLocation.getLatitude() + " N");
+        setTextView(findViewById(R.id.currentLong), mLocation.getLongitude() + " W");
     }
 
     private String getCurrentLocationAsString(){
