@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     // Current radius of fence
     private float radiusOfFence;
     // Current Distance to Fence
-    private Float distanceToFence;
+    private Float distanceToFence = null;
 
     // Location Listener
     private final LocationListener mLocationListener = new LocationListener() {
@@ -154,32 +154,31 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     // Checks if user is still within the fence depending on fence range selected
     private void withinFence(){
         setCurrentLocation();
+
+        String result = "Current Location: \n" + Double.toString(mLocation.getLatitude()).substring(0, 9) + " N\n"
+                        + Double.toString(mLocation.getLongitude()).substring(0, 9) + " W\n";
+        if (distanceToFence != null) {
+            result = result + "Distance to Fence: " + distanceToFence.toString() + " m\n";
+            setTextView(findViewById(R.id.distanceTextView), distanceToFence.toString() + " m");
+        }
+
         if(mLocation != null && centerOfFence != null) {
             distanceToFence = radiusOfFence - mLocation.distanceTo(centerOfFence);
             if (mLocation.distanceTo(centerOfFence) > radiusOfFence) {
                 setStatus("!!EXITED FENCE!!");
-                sendToPebble("Current Location: \n" + Double.toString(mLocation.getLatitude()).substring(0, 9) + " N\n"
-                        + Double.toString(mLocation.getLongitude()).substring(0, 9) + " W\n"
-                        + "Distance to Fence: " + distanceToFence.toString()
-                        + "\n!!!EXITED FENCE!!!");
+                result = result + "!!!EXITED FENCE!!!\n";
             }
-            else{
-                
-//                sendToPebble(distanceToFence.toString() + " m away");
-                setCurrentLocation();
-                sendToPebble("Current Location: \n" + Double.toString(mLocation.getLatitude()).substring(0, 9) + " N\n"
-                        + Double.toString(mLocation.getLongitude()).substring(0, 9) + " W\n"
-                        + "Distance to Fence: " + distanceToFence.toString());
-                setTextView(findViewById(R.id.distanceTextView), distanceToFence.toString() + " m");
+            else {
+//                sendToPebble("Current Location: \n" + Double.toString(mLocation.getLatitude()).substring(0, 9) + " N\n"
+//                        + Double.toString(mLocation.getLongitude()).substring(0, 9) + " W\n"
+//                        + "Distance to Fence: " + distanceToFence.toString());
                 setStatus("Inside Fence");
             }
-
-
-
-
         }
-        sendToPebble("Current Location: \n" + Double.toString(mLocation.getLatitude()).substring(0, 9) + " N\n"
-                + Double.toString(mLocation.getLongitude()).substring(0, 9) + " W\n");
+
+//        sendToPebble("Current Location: \n" + Double.toString(mLocation.getLatitude()).substring(0, 9) + " N\n"
+//                + Double.toString(mLocation.getLongitude()).substring(0, 9) + " W\n");
+        sendToPebble(result);
     }
 
     // Send a message to Pebble

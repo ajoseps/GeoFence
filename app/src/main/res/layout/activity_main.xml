@@ -58,7 +58,7 @@
             android:layout_width="340dp"
             android:layout_height="39dp"
             android:weightSum="1"
-            android:background="#ffa2c8f7"
+            android:background="#ff24c742"
             android:layout_gravity="center_horizontal">
 
             <TextView
@@ -124,7 +124,7 @@
             android:orientation="horizontal"
             android:layout_width="340dp"
             android:layout_height="36dp"
-            android:background="#ffa2c8f7"
+            android:background="#ff24c742"
             android:layout_gravity="center_horizontal">
 
             <TextView
